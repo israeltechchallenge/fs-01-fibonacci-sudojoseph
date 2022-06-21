@@ -1,0 +1,11 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    color: #373A3C;
+}
+
+input[type="number"] {
+    width: 86px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
