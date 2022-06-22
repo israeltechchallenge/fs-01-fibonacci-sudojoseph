@@ -8,4 +8,9 @@ input[type="number"] {
     width: 86px;
 }
 
+.container {
+    padding: 100px 164px;
+    margin: 0;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
