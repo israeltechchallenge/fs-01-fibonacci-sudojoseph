@@ -4,13 +4,29 @@ body {
     color: #373A3C;
 }
 
-input[type="number"] {
-    width: 86px;
-}
-
 .container {
     padding: 100px 164px;
     margin: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    width: 86px;
+  }
+
+.alert {
+    height: 33px;
+    line-height: 22px;
+    bottom: -64px;
+    right: 6px;
+    min-width: 195px;
+    padding: 5px 3px;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');

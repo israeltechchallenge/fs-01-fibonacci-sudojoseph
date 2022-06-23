@@ -11,19 +11,26 @@
 <body>
     <div class="container">
         <h1 class="display-1 mb-0 pb-5">Fibonacci Calculator</h1>
-        <form class="row g-3 fs-4 fw-normal">
+        <form class="row fs-4 fw-normal">
             <div class="col-auto d-flex flex-column justify-content-center">
                 <p class="mb-0">The Fibonnaci Of</p>
             </div>
-            <div class="col-auto d-flex flex-column justify-content-center">
-              <input type="number" class="form-control" id="inputNumber" placeholder="#">
+            <div class="col-auto d-flex flex-column justify-content-center position-relative">
+              <input type="number" class="form-control" id="inputNumber" placeholder="#" width="1">     
+              <div id="lessThanFiftyErr" class="alert alert-danger fs-6 position-absolute d-none mt-5" role="alert" size="1">
+                Can’t be larger than 50
+              </div>         
             </div>
             <div class="col-auto d-flex flex-column justify-content-center">
               <button type="submit" class="btn btn-primary mb-0">Is</button>    
             </div>
             <div class="col-auto d-flex flex-column justify-content-center">
-                <div class="text-decoration-underline lh-lg fw-bold" id="output"></div>
-              </div>
+                <div class="text-decoration-underline fw-bold" id="output"></div>
+                <div id="spinner" class="spinner-border mb-0 d-none" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p id="serverError" class="fs-6 m-0 text-danger"></p>
+              </div>  
           </form>
     </div>
 </body>
