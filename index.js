@@ -7,6 +7,7 @@ const spinnerAllCalculations = document.getElementById('spinnerAllCalculations')
 const serverError = document.getElementById('serverError');
 const lessThanFiftyErr = document.getElementById('lessThanFiftyErr');
 const allCalculationsList = document.getElementById('allCalculationsList');
+const saveCalculationsCheckbox = document.getElementById('saveCalculations');
 
 
 //Fibonacci Calculator 
@@ -34,11 +35,15 @@ const showSpecificFibonacciNr = number => {
 
 
     //Fronted validation check
-    if (number <= 50) {
-        toggleSpinner(specificNrSpinner);
-        apiHandeling(URL, onSuccess, onError)
+    if (number < 50 && number >= 0) {
+        if (saveCalculationsCheckbox.checked) {
+            toggleSpinner(specificNrSpinner);
+            apiHandeling(URL, onSuccess, onError);
+        } else {
+            fibonacciLocalCalculation(number);
+        }
     } else {
-        showValidateMsg(true);
+        showValidateMsg(true, number);
     }
 }
 
@@ -55,7 +60,6 @@ const showAllCalculations = () => {
         allCalculationsList.innerHTML = elmList;
         toggleSpinner(spinnerAllCalculations);
 
-        // console.log(data.results);
     };
 
     const onError = () => {
@@ -63,6 +67,26 @@ const showAllCalculations = () => {
     };
 
     apiHandeling(URL, onSuccess);
+}
+
+//Counter values for local fibonacci calculation function
+let prevNr = 0, newNr = 0, outputNr = 0;
+
+//Fibonacci Local Calculation function
+const fibonacciLocalCalculation = index => {
+    if (index == 0) {
+        outputElm.innerText = outputNr;
+        prevNr = 0, newNr = 0, outputNr = 0;
+        return;
+    }
+
+    outputNr = prevNr + newNr;
+    prevNr = newNr;
+    newNr = outputNr;
+
+    if (prevNr === 0) prevNr = 1, outputNr = 1;
+    
+    fibonacciLocalCalculation(index-1);
 }
 
 //Api fetch function
@@ -88,8 +112,10 @@ const toggleSpinner = spinner => {
     }
 } 
 
-const showValidateMsg = (show) => {
+const showValidateMsg = (show, num) => {
+    const message = num < 0 ? 'Can’t be negative' : 'Can’t be larger than 50';
     if (show) {
+        lessThanFiftyErr.innerText = message;
         lessThanFiftyErr.classList.remove('d-none');
         inputElm.classList.add('border-danger', 'text-danger');
     } else {
