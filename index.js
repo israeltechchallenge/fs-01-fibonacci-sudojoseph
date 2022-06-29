@@ -8,6 +8,10 @@ const serverError = document.getElementById("serverError");
 const lessThanFiftyErr = document.getElementById("lessThanFiftyErr");
 const allCalculationsList = document.getElementById("allCalculationsList");
 const saveCalculationsCheckbox = document.getElementById("saveCalculations");
+const allDropdownItems = document.querySelectorAll('.dropdown-item');
+
+let allSearchesList = [];
+let sortPreference;
 
 //Api fetch function
 
@@ -38,15 +42,16 @@ const showSpecificFibonacciNr = async (number) => {
   outputElm.innerText = "";
 
   //Fronted validation check
-  if (number < 50 && number >= 0) {
+  if (number <= 50 && number >= 0) {
     if (saveCalculationsCheckbox.checked) {
       try {
-        toggleSpinner(specificNrSpinner);
+        showHideSpinner(specificNrSpinner, 1);
         const response = await apiHandeling(URL)
+        showHideSpinner(specificNrSpinner, 0);
         printSingleFibonacci(response);
       } catch (err) {
         printServerError(err);
-        toggleSpinner(specificNrSpinner)
+        showHideSpinner(specificNrSpinner, 0);
       }
     } else {
       fibonacciLocalCalculation(number);
@@ -59,45 +64,58 @@ const showSpecificFibonacciNr = async (number) => {
 //Wright specific number to page
 const printSingleFibonacci = (data) => {
   outputElm.innerText = data.result;
-  toggleSpinner(specificNrSpinner);
   showAllCalculations();
 };
 
-//Print error message
-
-const printServerError = (errMsg) => {
-  serverError.innerText = errMsg;
+const sortList = (innerText) => {
+  switch (innerText) {
+    case 'Number Asc':
+      allSearchesList.sort((a, b) => a.number - b.number);
+      break;
+    case 'Number Desc':
+      allSearchesList.sort((a, b) => b.number - a.number);
+      break;
+    case 'Date Asc':
+      allSearchesList.sort((a, b) => a.createdDate - b.createdDate);
+      break;
+    case 'Date Desc':
+      allSearchesList.sort((a, b) => b.createdDate - a.createdDate);
+  }
+  
+  printListOfAllCalculations(allSearchesList);
 };
 
 //Get all past fibonacci calculations from server
 
 const showAllCalculations = async () => {
-  const URL = 'http://localhost:5050/getFibonacciResults'
-  toggleSpinner(spinnerAllCalculations);
+  const URL = 'http://localhost:5050/getFibonacciResults';
   try {
-
+    showHideSpinner(spinnerAllCalculations, 1);
     const response = await apiHandeling(URL);
-    printListOfAllCalculations(response);
+    allSearchesList = response.results;
+    showHideSpinner(spinnerAllCalculations, 0);
+    !sortPreference ? printListOfAllCalculations(allSearchesList) : sortList(sortPreference);
   } catch (err) {
     printServerError(err);
-    toggleSpinner(spinnerAllCalculations);
+    showHideSpinner(spinnerAllCalculations, 0);
   }
 };
 
 const printListOfAllCalculations = (data) => {
   let elmList = "";
 
-  data.results.map(
-    (calcObj) =>
-      (elmList += `<li class="border-bottom border-dark pb-3 pt-3">The Fibonacci of <b>${
-        calcObj.number
-      }</b> is <b>${calcObj.result}</b>. Calculated at: ${new Date(
-        calcObj.createdDate
-      )}</li>`)
-  );
+  data.map(calcObj => elmList += `<li class="border-bottom border-dark pb-3 pt-3">
+      The Fibonacci of <b>${calcObj.number}</b> is <b>${calcObj.result}</b>. 
+      Calculated at: ${new Date(calcObj.createdDate)}
+    </li>`);
   
   allCalculationsList.innerHTML = elmList;
-  toggleSpinner(spinnerAllCalculations);
+};
+
+//Print error message
+
+const printServerError = (errMsg) => {
+  serverError.innerText = errMsg;
 };
 
 //Fibonacci Local Calculation functionality
@@ -123,11 +141,12 @@ const fibonacciLocalCalculation = (index) => {
 };
 
 //Spinner function
-const toggleSpinner = (spinner) => {
-  if (!spinner.classList.contains("d-none")) {
-    spinner.classList.add("d-none");
+const showHideSpinner = (spinnerElm, show) => {
+  if (show) {
+    spinnerElm.classList.remove("d-none");
   } else {
-    spinner.classList.remove("d-none");
+    spinnerElm.classList.add("d-none");
+
   }
 };
 
@@ -144,10 +163,17 @@ const showValidateMsg = (show, num) => {
   }
 };
 
-//Event listener
+//Event listeners
 formElm.addEventListener("submit", (e) => {
   e.preventDefault();
   showSpecificFibonacciNr(inputElm.value);
+});
+
+allDropdownItems.forEach((item) => {
+  item.addEventListener('click', e => {
+    sortPreference = e.target.innerText
+    sortList(sortPreference);
+  });
 });
 
 //On page load
