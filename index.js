@@ -10,6 +10,7 @@ const allCalculationsList = document.getElementById("allCalculationsList");
 const saveCalculationsCheckbox = document.getElementById("saveCalculations");
 const allDropdownItems = document.querySelectorAll('.dropdown-item');
 
+//Global variables
 let allSearchesList = [];
 let sortPreference;
 
