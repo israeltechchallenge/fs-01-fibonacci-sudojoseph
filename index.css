@@ -1,0 +1,40 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    color: #373A3C;
+}
+
+.container {
+    margin: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    width: 86px;
+  }
+
+.alert {
+    height: 33px;
+    line-height: 22px;
+    bottom: -64px;
+    right: 6px;
+    min-width: 195px;
+    padding: 5px 3px;
+}
+
+.dropdown-toggle {
+  background-color: #E6E6E6;
+}
+
+.dropdown-toggle:hover {
+  background-color: #E6E6E6;
+  opacity: 0.8;
+}
+
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'); */
